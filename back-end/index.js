@@ -1,5 +1,5 @@
 const express = require('express');
-const {mongoose, startDB} = require('./db.js');
+var {mongoose, startDB} = require('./db.js');
 const jwt = require('jsonwebtoken');
 // require('dotenv').config()
 const UserController = require('./controllers/UserController.js')
