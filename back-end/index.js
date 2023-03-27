@@ -10,11 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-try{
-    startDB();
-}catch(err){
-    console.log(err);
-}
+await startDB();
 
 app.post('/signup', UserController.signup);
 app.post('/login', UserController.login);
