@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
 
 async function startDB(){
-        mongoose = mongoose.connect(process.env.MONGODB_URL).then(
-            () => {console.log('conectado...')}).catch((err) => {console.log(err)});
+        try{
+            var mongoose = await mongoose.connect(process.env.MONGODB_URL).then(() => {console.log('conectado...')}).catch((err) => {console.log(err)});
+        }catch(err){
+                console.log(err);
+        }      
 }
 
 
