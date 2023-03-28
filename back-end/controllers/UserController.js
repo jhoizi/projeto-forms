@@ -1,6 +1,6 @@
 const User = require('../models/User.js');
 const bcrypt = require('bcrypt');
-const authController = require('./AuthorizationController.js');
+const authController = require('AuthorizationController.js');
 class UserController{
 
     async signup(req, res){
