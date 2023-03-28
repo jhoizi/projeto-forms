@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config()
 const UserController = require('./controllers/UserController.js')
 const cors = require('cors');
+const authController = require('./AuthorizationController.js');
+
 
 const app = express();
 
@@ -14,7 +16,7 @@ startDB();
 
 app.post('/signup', UserController.signup);
 app.post('/login', UserController.login);
-app.get('/', UserController.all);
+app.get('/', authController.authorized, UserController.all);
 app.delete('/remove/:id', UserController.remove);
 
 app.listen(process.env.PORT, () => {

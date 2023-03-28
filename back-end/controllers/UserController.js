@@ -1,14 +1,16 @@
 const User = require('../models/User.js');
-
+const bcrypt = require('bcrypt');
+const authController = require('./AuthorizationController.js');
 class UserController{
 
     async signup(req, res){
         var createdUser;
         try{
-            console.log(req.body);
-            createdUser = await User.create(req.body);
+            var {password, phone, name, email} = req.body;
+            password = bcrypt.hash(password, 8);
+            createdUser = await User.create({password, phone, name, email});
         }catch(err){
-            return res.status(404).json({message : `erro ao criar usuário! ${err}`});
+            return res.status(400).json({message : `erro ao criar usuário! ${err}`});
         }
         return res.status(200).json(JSON.stringify(createdUser));
     }
@@ -21,18 +23,18 @@ class UserController{
             const byName = await User.findOne({name: login}).exec();
 
             if(!byName && !byEmail){
-                return res.status(404).json({message: 'Erro ao fazer login, cheque seu login e senha'});
+                return res.status(400).json({message: 'Erro ao fazer login, cheque seu login e senha'});
             }
 
             user = !byName ? byEmail : byName;
 
-            if(!(user.password == password)){
-                return res.status(404).json({message: 'Erro ao fazer login, cheque seu login e senha'});
+            if(!(bcrypt.compare(password, user.password))){
+                return res.status(400).json({message: 'Erro ao fazer login, cheque seu login e senha'});
             }else{
-                return res.status(200).json(JSON.stringify({message : user}));
+                return res.status(200).json(JSON.stringify({message : user, token : authController.getToken(user, 3600)}));
             }
         } catch (err) {
-            return res.status(404).json({message: `Erro Login! ${err}`});
+            return res.status(400).json({message: `Erro Login! ${err}`});
         }
     }
 
@@ -41,7 +43,7 @@ class UserController{
         try{
             allUsers = await User.find({});
         }catch(err){
-            return res.status(404).json({message : 'Erro na busca dos usuários!'});
+            return res.status(400).json({message : 'Erro na busca dos usuários!'});
         }
 
         return res.status(200).json(JSON.stringify(allUsers));
@@ -53,7 +55,7 @@ class UserController{
         try{
             await User.findByIdAndDelete(id).exec();
         }catch(err){
-            return res.status(404).json({message : 'Erro ao excluir usuário!'});
+            return res.status(400).json({message : 'Erro ao excluir usuário!'});
         }
         return res.status(200).json({message : 'removido!'});
     }
