@@ -4,15 +4,22 @@ const authController = require('./AuthorizationController.js');
 class UserController{
 
     async signup(req, res){
-        var createdUser;
         try{
             var {password, phone, name, email} = req.body;
+            
+            const userExists = await User.findOne({email : email}).exec();
+            
+            if(userExists){
+                return res.status(400).json({message : 'Endereço de email já foi cadstrado!'});
+            }
+            
             password = await bcrypt.hash(password, 8);
-            createdUser = await User.create({password, phone, name, email});
+            const createdUser = await User.create({password, phone, name, email});
+            return res.status(200).json(JSON.stringify(createdUser));
+            
         }catch(err){
             return res.status(400).json({message : `erro ao criar usuário! ${err}`});
         }
-        return res.status(200).json(JSON.stringify(createdUser));
     }
 
     async login(req, res){
