@@ -19,7 +19,7 @@ class AuthorizationController{
             const decode = await promisify(jwt.verify(token, this.chave));
             return next();
         }catch(err){
-            return res.status(400).json({messagem : "Erro ao decodificar token!"});
+            return res.status(400).json({messagem : `Erro ao decodificar token! ${err}`});
         }
     }
 
