@@ -7,7 +7,7 @@ class UserController{
         var createdUser;
         try{
             var {password, phone, name, email} = req.body;
-            password = bcrypt.hash(password, 8);
+            password = await bcrypt.hash(password, 8);
             createdUser = await User.create({password, phone, name, email});
         }catch(err){
             return res.status(400).json({message : `erro ao criar usuário! ${err}`});
