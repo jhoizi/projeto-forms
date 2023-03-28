@@ -16,7 +16,7 @@ class AuthorizationController{
         }
 
         try{
-            const decode = await promisify(jwt.verify)(token, chave);
+            const decode = await promisify(jwt.verify)(token, this.chave);
             return next();
         }catch(err){
             return res.status(400).json({messagem : "Erro ao decodificar token!"});
@@ -24,7 +24,7 @@ class AuthorizationController{
     }
 
     getToken(userInfo, timeExpiration){
-        return jwt.sign(userInfo, chave, {expiresIn : timeExpiration});
+        return jwt.sign(userInfo, this.chave, {expiresIn : timeExpiration});
     }
 
 
