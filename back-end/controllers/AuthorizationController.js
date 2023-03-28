@@ -4,6 +4,7 @@ const {promisify} = require('util');
 class AuthorizationController{
     chave = "papazinhacontinualinda";
     async authorized(req, res, next){
+        const chave = "papazinhacontinualinda";
         const authHeader = req.headers.authorization;
         if(!authHeader){
             return res.status(400).json({message : 'Faça o login para poder acessar!'});
@@ -16,7 +17,7 @@ class AuthorizationController{
         }
 
         try{
-            const decode = await promisify(jwt.verify(token, this.chave));
+            const decode = await promisify(jwt.verify(token, chave));
             return next();
         }catch(err){
             return res.status(400).json({messagem : `Erro ao decodificar token! ${err}`});
