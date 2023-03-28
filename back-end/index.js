@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config()
 const UserController = require('./controllers/UserController.js')
 const cors = require('cors');
-const authController = require('./AuthorizationController.js');
+const authController = require('./controllers/AuthorizationController.js');
 
 
 const app = express();
