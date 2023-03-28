@@ -31,7 +31,7 @@ class UserController{
             if(!(bcrypt.compare(password, user.password))){
                 return res.status(400).json({message: 'Erro ao fazer login, cheque seu login e senha'});
             }else{
-                return res.status(200).json(JSON.stringify({message : user, token : authController.getToken(user, 3600)}));
+                return res.status(200).json(JSON.stringify({message : user, token : authController.getToken(user.toJSON(), 3600)}));
             }
         } catch (err) {
             return res.status(400).json({message: `Erro Login! ${err}`});
